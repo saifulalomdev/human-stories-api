@@ -55,7 +55,7 @@ export const authController = {
     },
     async refresh(req: Request<{}, {}, { refreshToken: string }>, res: Response, next: NextFunction) {
         try {
-            
+
             // Get the token from the secure cookie
             const { refreshToken } = req.body;
             const result = await authService.refreshAccessToken(refreshToken);
@@ -66,13 +66,39 @@ export const authController = {
         }
     },
     async logout(req: Request<{}, {}, { refreshToken: string }>, res: Response, next: NextFunction) {
-    try {
-        const { refreshToken } = req.body;
-        await authService.logout(refreshToken);
+        try {
+            const { refreshToken } = req.body;
+            await authService.logout(refreshToken);
 
-        return sendResponse(res, 200, "Logged out successfully", true);
-    } catch (error) {
-        next(error);
+            return sendResponse(res, 200, "Logged out successfully", true);
+        } catch (error) {
+            next(error);
+        }
+    },
+    async forgotPassword(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { email } = req.body;
+            await authService.requestPasswordReset(email);
+            return sendResponse(res, 200, "If account exists, an OTP has been sent.", true, null);
+        } catch (error) {
+            next(error)
+        }
+    },
+    async verifyOTP(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { email, code } = req.body;
+            const resetToken = await authService.verifyResetOTP(email, code);
+            return sendResponse(res, 200, "OTP verified", true, resetToken);
+        } catch (error) {
+            next(error)
+        }
+    },
+    async resetPassword(req: Request, res: Response) {
+        // Note: The userId comes from the decoded Reset Token via middleware
+        const { password } = req.body;
+        const userId = req.user!.id;
+
+        await authService.completePasswordReset(userId, password);
+        // return sendResponse(res, { message: "Password updated successfully. Please login." });
     }
-}
 };

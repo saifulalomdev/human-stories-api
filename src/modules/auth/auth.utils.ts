@@ -5,7 +5,6 @@ import { env } from '@/config/env';
 import { UserPublic } from '@/infrastructure/db';
 import { RefreshTokenPayload } from '@/infrastructure/db/validators/sessions';
 
-
 const SALT_ROUND = 10;
 const ACCESS_TOKEN_SECRET = env.JWT_ACCESS_SECRET;
 const REFRESH_TOKEN_SECRET = env.JWT_REFRESH_SECRET;
