@@ -1,6 +1,6 @@
 // src/modules/auth/auth.utils.ts
 import bcrypt from 'bcrypt';
-import JWT, { SignOptions } from 'jsonwebtoken'; // Import SignOptions
+import JWT, { SignOptions } from 'jsonwebtoken';
 import { env } from '@/config/env';
 import { UserPublic } from '@/infrastructure/db';
 import { RefreshTokenPayload } from '@/infrastructure/db/validators/sessions';
@@ -23,26 +23,6 @@ export async function hashPassword(password: string): Promise<string> {
 export async function verifyPassword(password: string, hash: string): Promise<boolean> {
     return bcrypt.compare(password, hash);
 }
-
-// export const generateTokens = (payload: UserPublic) => {
-//     // 1. Create a plain object. JWT.sign fails if the payload 
-//     // is a class instance or has hidden Zod properties.
-//     const jwtPayload = {
-//         id: payload.id,
-//         email: payload.email,
-//         name: payload.name,
-//     };
-
-//     const accessToken = JWT.sign(jwtPayload, ACCESS_TOKEN_SECRET, {
-//         expiresIn: ACCESS_TOKEN_EXIRES_IN,
-//     });
-
-//     const refreshToken = JWT.sign(jwtPayload, REFRESH_TOKEN_SECRET, {
-//         expiresIn: REFRESH_TOKEN_EXIRES_IN,
-//     });
-
-//     return { accessToken, refreshToken };
-// };
 
 export const verifyAccessToken = (token: string) => {
     try {
