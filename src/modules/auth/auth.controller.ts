@@ -33,8 +33,6 @@ export const authController = {
         try {
             const result = await authService.authenticateUser(req.body);
 
-
-
             return sendResponse(res, 200, "User login successfully", true, result);
         } catch (error) {
             next(error);
@@ -51,6 +49,18 @@ export const authController = {
             const user = await authService.getCurrentUser(userId);
 
             return sendResponse(res, 200, "User profile retrieved", true, user);
+        } catch (error) {
+            next(error);
+        }
+    },
+    async refresh(req: Request<{}, {}, { refreshToken: string }>, res: Response, next: NextFunction) {
+        try {
+            
+            // Get the token from the secure cookie
+            const { refreshToken } = req.body;
+            const result = await authService.refreshAccessToken(refreshToken);
+
+            return sendResponse(res, 200, "Token refreshed successfully", true, result);
         } catch (error) {
             next(error);
         }
