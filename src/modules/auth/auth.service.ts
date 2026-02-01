@@ -16,6 +16,8 @@ import {
     verifyRefreshToken
 } from './auth.utils';
 import { sessionsRepository } from '@/infrastructure/db/repositories/sessions';
+import { otpRepository } from '@/infrastructure/db/repositories/otps';
+import { mailService } from '../mail/mail.service';
 
 
 export const authService = {
@@ -98,7 +100,7 @@ export const authService = {
             throw new AppError("Refresh token missing.", 401);
         }
         // 1. Verify the JWT signature and structure
-        const decoded = verifyRefreshToken(token); // You'll need this helper in utils
+        const decoded = verifyRefreshToken(token);
         if (!decoded) {
             throw new AppError("Invalid or expired refresh token.", 401);
         }
@@ -132,6 +134,36 @@ export const authService = {
         }
 
         return null;
+    },
+    async requestPasswordReset(email: string) {
+        const user = await userRepository.findByEmail(email);
+        if (!user) return; // Silent return for security
+
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        await otpRepository.createOTP(user.id, otp, "PASSWORD_RESET");
+
+        await mailService.sendOTP(email, otp, "RESET");
+    },
+    
+    async verifyResetOTP(email: string, code: string) {
+        const user = await userRepository.findByEmail(email);
+        if (!user) throw new AppError("Invalid request", 400);
+
+        const validOtp = await otpRepository.findValidOTP(user.id, code, "PASSWORD_RESET");
+
+        if (!validOtp || validOtp.expiresAt < new Date()) {
+            throw new AppError("Invalid or expired code", 400);
+        }
+
+        // Success: Burn the OTP so it can't be used again
+        await otpRepository.deleteOTP(validOtp.id);
+
+        // Issue temporary token (valid for 15 mins)
+        // return signResetToken(user.id);
+    },
+    async completePasswordReset(userId: string, newPassword: string) {
+        const hashedPassword = await hashPassword(newPassword);
+        await userRepository.updateById(userId, { password: hashedPassword });
     },
     /**
      * Helper to ensure consistency when sending user data to client

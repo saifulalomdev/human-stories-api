@@ -3,16 +3,25 @@ import { Router, IRouter } from 'express';
 import { authController } from './auth.controller';
 import { requireAuth } from '@/infrastructure/http/middlewares';
 import { userLoginSchema, userRegistrationSchema } from '@/infrastructure/db';
+import { jwt } from '@/infrastructure/db';
+import { email } from '@/infrastructure/db/validators/email';
 
 const routes: IRouter = Router()
 
 routes.get("/me", requireAuth(), authController.getMe)
 
-routes.post("/refresh", authController.refresh);
+routes.post("/refresh", validateResource(jwt), authController.refresh);
 
 routes.post("/register", validateResource(userRegistrationSchema), authController.register)
 
 routes.post("/login", validateResource(userLoginSchema), authController.login);
-routes.post("/logout", authController.logout);
+
+routes.post("/logout", validateResource(jwt), authController.logout);
+
+routes.post("/forgot-password", validateResource(email), authController.forgotPassword);
+
+routes.post("/verify-otp", authController.verifyOTP);
+
+routes.post("/reset-password", authController.resetPassword);
 
 export default routes

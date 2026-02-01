@@ -1,9 +1,10 @@
 import { AppError } from "@/core";
+import { userRepository } from "@/infrastructure/db";
 import { verifyAccessToken } from "@/modules/auth/auth.utils";
 import { Response, NextFunction } from 'express';
 
-export function requireAuth() {
-    return (req: any, _res: Response, next: NextFunction) => {
+export  function requireAuth() {
+    return async (req: any, _res: Response, next: NextFunction) => {
         try {
             const authHeader = req.headers.authorization;
 
@@ -24,7 +25,9 @@ export function requireAuth() {
                 throw new AppError("Session expired or invalid. Please sign in again.", 401);
             }
 
-            req.user = decodedData;
+            const user = await userRepository.findById(decodedData.id)
+
+            req.user = user;
 
             next()
         } catch (error: any) {

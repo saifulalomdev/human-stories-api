@@ -1,8 +1,17 @@
-// packages/db/src/index.ts
+// users
 export * from "./schema/enums"
 export * from "./schema/users"
 export * from "./repositories/users"
 export * from "./validators/users"
+
+// otps
+export * from "./schema/otps"
+export * from "./repositories/otps"
+// export * from "./validators/otps"
+
+export * from "./validators/jwt-token"
+
+
 
 // stories
 export * from "./schema/stories"
