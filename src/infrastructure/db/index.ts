@@ -10,6 +10,7 @@ export * from "./repositories/otps"
 // export * from "./validators/otps"
 
 export * from "./validators/jwt-token"
+export * from "./validators/email"
 
 
 
