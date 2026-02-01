@@ -4,7 +4,7 @@ import { authController } from './auth.controller';
 import { requireAuth } from '@/infrastructure/http/middlewares';
 import { userLoginSchema, userRegistrationSchema } from '@/infrastructure/db';
 import { jwt } from '@/infrastructure/db';
-import { email } from '@/infrastructure/db/validators/email';
+import { email } from '@/infrastructure/db';
 
 const routes: IRouter = Router()
 
