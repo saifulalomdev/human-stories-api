@@ -10,8 +10,8 @@ const ACCESS_TOKEN_SECRET = env.JWT_ACCESS_SECRET;
 const REFRESH_TOKEN_SECRET = env.JWT_REFRESH_SECRET;
 
 // Ensure these are cast to the specific type JWT expects
-const ACCESS_TOKEN_EXIRES_IN = (env.JWT_ACCESS_SECRET_EXIRES_IN || "10m") as SignOptions['expiresIn'];
-const REFRESH_TOKEN_EXIRES_IN = (env.JWT_REFRESH_SECRET_EXIRES_IN || "15d") as SignOptions['expiresIn'];
+const ACCESS_TOKEN_EXIRES_IN = env.JWT_ACCESS_SECRET_EXPIRES_IN as SignOptions['expiresIn'];
+const REFRESH_TOKEN_EXIRES_IN = env.JWT_REFRESH_SECRET_EXPIRES_IN as SignOptions['expiresIn'];
 
 export type DecodedPayload = UserPublic;
 
