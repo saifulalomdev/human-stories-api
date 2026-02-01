@@ -8,7 +8,14 @@ import {
     userRepository
 } from '@/infrastructure/db';
 import { AppError } from '@/core';
-import { generateTokens, hashPassword, verifyPassword } from './auth.utils';
+import {
+    hashPassword,
+    signAccessToken,
+    signRefreshToken,
+    verifyPassword,
+    verifyRefreshToken
+} from './auth.utils';
+import { sessionsRepository } from '@/infrastructure/db/repositories/sessions';
 
 
 export const authService = {
@@ -61,9 +68,13 @@ export const authService = {
         }
 
         const user = this.mapToPublicUser(existingUser);
-        const tokens = generateTokens(user);
+        const accessToken = signAccessToken(user);
+        const { refreshToken, jti, expiresAt } = signRefreshToken(user);
 
-        return { tokens, user };
+        // save refresh token metadata
+        await sessionsRepository.create({ expiresAt, id: jti, userId: user.id })
+
+        return { tokens: { accessToken, refreshToken }, user };
     },
 
     async getCurrentUser(userId: string): Promise<UserPublic> {
@@ -77,6 +88,37 @@ export const authService = {
 
         // 3. Return formatted public data
         return this.mapToPublicUser(user);
+    },
+    /**
+ * Service to issue a new Access Token using a valid Refresh Token
+ */
+    async refreshAccessToken(token: string): Promise<{ accessToken: string }> {
+
+        if (!token) {
+            throw new AppError("Refresh token missing.", 401);
+        }
+        // 1. Verify the JWT signature and structure
+        const decoded = verifyRefreshToken(token); // You'll need this helper in utils
+        if (!decoded) {
+            throw new AppError("Invalid or expired refresh token.", 401);
+        }
+
+        // 2. Check the Database to see if the session is still valid/active
+        const session = await sessionsRepository.findValidSession(decoded.jti);
+        if (!session) {
+            throw new AppError("Session has been revoked or expired.", 401);
+        }
+
+        // 3. Get the user to ensure they still exist
+        const user = await userRepository.findById(decoded.id);
+        if (!user) {
+            throw new AppError("User no longer exists.", 404);
+        }
+
+        // 4. Generate only a NEW Access Token
+        const accessToken = signAccessToken(this.mapToPublicUser(user));
+
+        return { accessToken };
     },
     /**
      * Helper to ensure consistency when sending user data to client
