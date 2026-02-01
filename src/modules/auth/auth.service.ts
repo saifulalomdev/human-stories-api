@@ -120,6 +120,19 @@ export const authService = {
 
         return { accessToken };
     },
+    async logout(refreshToken: string) {
+        if (!refreshToken) return; // Already "logged out" if no token exists
+
+        // 1. Verify and decode the refresh token to get the JTI
+        const decoded = verifyRefreshToken(refreshToken);
+
+        if (decoded && decoded.jti) {
+            // 2. Delete the session from the database
+            await sessionsRepository.deleteSession(decoded.jti);
+        }
+
+        return null;
+    },
     /**
      * Helper to ensure consistency when sending user data to client
      */

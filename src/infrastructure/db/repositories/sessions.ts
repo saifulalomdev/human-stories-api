@@ -51,5 +51,9 @@ export const sessionsRepository = {
             .update(sessions)
             .set({ isRevoked: true })
             .where(eq(sessions.userId, userId));
+    },
+    async deleteSession(jti: string) {
+        return await db.delete(sessions)
+            .where(eq(sessions.id, jti));
     }
 };
