@@ -12,6 +12,7 @@ routes.post("/refresh", authController.refresh);
 
 routes.post("/register", validateResource(userRegistrationSchema), authController.register)
 
-routes.post("/login", validateResource(userLoginSchema), authController.login)
+routes.post("/login", validateResource(userLoginSchema), authController.login);
+routes.post("/logout", authController.logout);
 
 export default routes

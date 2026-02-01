@@ -64,5 +64,15 @@ export const authController = {
         } catch (error) {
             next(error);
         }
+    },
+    async logout(req: Request<{}, {}, { refreshToken: string }>, res: Response, next: NextFunction) {
+    try {
+        const { refreshToken } = req.body;
+        await authService.logout(refreshToken);
+
+        return sendResponse(res, 200, "Logged out successfully", true);
+    } catch (error) {
+        next(error);
     }
+}
 };
