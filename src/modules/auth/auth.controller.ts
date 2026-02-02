@@ -88,7 +88,7 @@ export const authController = {
         try {
             const { email, code } = req.body;
             const resetToken = await authService.verifyResetOTP(email, code);
-            return sendResponse(res, 200, "OTP verified", true, resetToken);
+            return sendResponse(res, 200, "OTP verified", true, { resetToken });
         } catch (error) {
             next(error)
         }
@@ -96,9 +96,8 @@ export const authController = {
     async resetPassword(req: Request, res: Response) {
         // Note: The userId comes from the decoded Reset Token via middleware
         const { password } = req.body;
-        const userId = req.user!.id;
-
+        const userId = req.user.id;
         await authService.completePasswordReset(userId, password);
-        // return sendResponse(res, { message: "Password updated successfully. Please login." });
+        return sendResponse(res, 200, "Password updated successfully. Please login.", true, null);
     }
 };

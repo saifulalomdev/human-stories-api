@@ -1,10 +1,9 @@
-import { validateResource } from '@/infrastructure/http/middlewares';
+import { requireResetToken, validateResource } from '@/infrastructure/http/middlewares';
 import { Router, IRouter } from 'express';
 import { authController } from './auth.controller';
 import { requireAuth } from '@/infrastructure/http/middlewares';
-import { userLoginSchema, userRegistrationSchema } from '@/infrastructure/db';
-import { jwt } from '@/infrastructure/db';
-import { email } from '@/infrastructure/db';
+import { otpSchema, userLoginSchema, userRegistrationSchema, jwt, email } from '@/infrastructure/db';
+
 
 const routes: IRouter = Router()
 
@@ -20,8 +19,8 @@ routes.post("/logout", validateResource(jwt), authController.logout);
 
 routes.post("/forgot-password", validateResource(email), authController.forgotPassword);
 
-routes.post("/verify-otp", authController.verifyOTP);
+routes.post("/verify-otp", validateResource(otpSchema), authController.verifyOTP);
 
-routes.post("/reset-password", authController.resetPassword);
+routes.post("/reset-password", requireResetToken(), authController.resetPassword);
 
 export default routes

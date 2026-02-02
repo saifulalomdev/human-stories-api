@@ -1,5 +1,5 @@
 // src/modules/auth/auth.docs.ts
-import { email, jwt, userLoginSchema, userRegistrationSchema } from '@/infrastructure/db';
+import { email, jwt, otpSchema, userLoginSchema, userRegistrationSchema } from '@/infrastructure/db';
 import { registry } from '@/infrastructure/open-api/generate-openapi';
 
 const openApiUserRegistrationSchema = userRegistrationSchema.openapi('Register body', {
@@ -146,6 +146,30 @@ registry.registerPath({
                 "application/json": {
                     schema: email.openapi("Forgot password body", {
                         example: { email: "saiful@saifulalom.com" }
+                    })
+                }
+            }
+        }
+    },
+    responses: {
+        200: {
+            description: "User profile retrieved successfully"
+        },
+        401: { description: "Unauthorized - Missing or invalid token" },
+    },
+});
+
+registry.registerPath({
+    path: "/auth/verify-otp",
+    method: "post",
+    tags: ["Auth"],
+    summary: "Verify otp",
+    request: {
+        body: {
+            content: {
+                "application/json": {
+                    schema: otpSchema.openapi("OTP request body", {
+                        example: { email: "user@emai.com", code: "123456" }
                     })
                 }
             }
