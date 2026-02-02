@@ -12,6 +12,7 @@ import {
     hashPassword,
     signAccessToken,
     signRefreshToken,
+    signResetToken,
     verifyPassword,
     verifyRefreshToken
 } from './auth.utils';
@@ -140,6 +141,7 @@ export const authService = {
         if (!user) return; // Silent return for security
 
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
         await otpRepository.createOTP(user.id, otp, "PASSWORD_RESET");
 
         await mailService.sendOTP(email, otp, "RESET");
@@ -159,7 +161,7 @@ export const authService = {
         await otpRepository.deleteOTP(validOtp.id);
 
         // Issue temporary token (valid for 15 mins)
-        // return signResetToken(user.id);
+        return signResetToken(user.id);
     },
     async completePasswordReset(userId: string, newPassword: string) {
         const hashedPassword = await hashPassword(newPassword);
