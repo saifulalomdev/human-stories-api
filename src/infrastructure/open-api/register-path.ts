@@ -1,7 +1,8 @@
 // src/infrastructure/open-api/register-path.ts
 import { registry } from './generate-openapi';
+import { ApiEndpoint } from './types';
 
-export const registerOpenApiPath = (tag: string, endpoints: readonly any[]) => {
+export const registerOpenApiPath = (tag: string, endpoints: readonly ApiEndpoint[]) => {
     endpoints.forEach((endpoint) => {
         const { path, method, summary, body, name, isProtected, responseDescription } = endpoint;
 
