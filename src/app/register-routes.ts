@@ -1,5 +1,4 @@
 // FILE: src/app/register-routes.js
-import './register-docs'
 import { Express } from 'express';
 import { healthHandler } from '../lib/health-handler';
 import authRoutes from '@/modules/auth';
