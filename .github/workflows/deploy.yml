@@ -5,8 +5,8 @@ on:
     branches: [main]
 
 jobs:
-  deploy:
-    name: Deploy to Vercel
+  test:
+    name: Test
     runs-on: ubuntu-latest
 
     steps:
@@ -19,7 +19,4 @@ jobs:
           version: 9
 
       - name: Install Vercel CLI
-        run: pnpm add -g vercel
-
-      - name: Deploy to Vercel
-        run: vercel --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
+        run: pnpm run test
