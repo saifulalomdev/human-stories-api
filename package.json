@@ -16,7 +16,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.25.0",
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^8.4.0",
     "@types/bcrypt": "^6.0.0",
