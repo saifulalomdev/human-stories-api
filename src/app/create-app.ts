@@ -5,7 +5,7 @@ import { registerMiddlewares } from './register-middlewares';
 import { registerRoutes } from './register-routes';
 import { registerErrorHandlers } from './register-error-handlers';
 
-export async function createApp(): Promise<Express> {
+export function createApp(): Express{
     const app = express();
 
     registerMiddlewares(app);
