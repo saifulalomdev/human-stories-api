@@ -25,8 +25,8 @@ export function generateOpenApiSpec() {
             description: "Human stories REST API documentation",
         },
         servers: [
-            { url: "http://localhost:5000", description: "Development server" },
             { url: "https://human-stories-api.onrender.com", description: "Production server" },
+            { url: "http://localhost:5000", description: "Development server" },
         ],
     });
 }
