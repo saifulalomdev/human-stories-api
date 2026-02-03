@@ -6,7 +6,7 @@ import healthRoutes from '@/modules/health/health.routes';
 
 export function registerRoutes(app: Express) {
 
-    app.use("/api", healthRoutes);
-    app.use("/api", authRoutes);
-    app.use("/api", docRoutes);
+    app.use(healthRoutes);
+    app.use(authRoutes);
+    app.use(docRoutes);
 }
