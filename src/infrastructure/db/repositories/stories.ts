@@ -1,6 +1,6 @@
 import { and, eq, desc, count } from 'drizzle-orm';
 import { db } from '../db';
-import { stories } from '../schema/stories';
+import { stories } from '../schema/storie';
 import { StoriesInsert, StoriesUpdate } from '../validators/stories';
 
 /**

@@ -1,8 +1,8 @@
-// @saifulalom.com/core -> src/http/smart-router.ts
+// src/http/smart-router.ts
 import { Router, RequestHandler } from 'express';
-import { registry } from '@/infrastructure/open-api/generate-openapi';
 import { validateRequest, requireAuth } from '@/infrastructure/http/middlewares';
 import { RouteConfig } from './types';
+import { registry } from '@/modules/doc/doc.service';
 
 export function createSmartRouter(tag: string) {
     const router = Router();
@@ -24,7 +24,7 @@ export function createSmartRouter(tag: string) {
         if (extraMiddlewares.length > 0) chain.push(...extraMiddlewares);
 
         // 3. Express Registration
-        router[method](path, ...chain, controller);
+        router[method](fullPath, ...chain, controller);
     };
 
     return { instance: router, add };

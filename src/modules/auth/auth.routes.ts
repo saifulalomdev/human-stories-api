@@ -1,32 +1,77 @@
 // src/modules/auth/auth.routes.ts
+import { otpSchema, userLoginSchema, userRegistrationSchema, jwt, email } from '@/infrastructure/db';
 import { authController } from './auth.controller';
 import { requireResetToken } from '@/infrastructure/http/middlewares';
-import { otpSchema, userLoginSchema, userRegistrationSchema, jwt, email } from '@/infrastructure/db';
-import { RouteConfig } from '@/infrastructure/http/types';
 import { createSmartRouter } from '@/infrastructure/http/smart-router';
+
 
 const auth = createSmartRouter("Auth");
 
-// 1. Identity Group
-const identityRoutes: RouteConfig[] = [
-    { method: 'get', path: "/me", summary: "Get profile", isProtected: true, controller: authController.getMe }
-];
+// --- Identity ---
+auth.add({
+    method: 'get',
+    path: "/me",
+    summary: "Get current profile",
+    isProtected: true,
+    controller: authController.getMe
+});
 
-// 2. Session Management Group
-const sessionRoutes: RouteConfig[] = [
-    { method: 'post', path: "/register", summary: "Register", schema: userRegistrationSchema, controller: authController.register },
-    { method: 'post', path: "/login", summary: "Login", schema: userLoginSchema, controller: authController.login },
-    { method: 'post', path: "/refresh", summary: "Refresh", schema: jwt, controller: authController.refresh },
-    { method: 'post', path: "/logout", summary: "Logout", schema: email, controller: authController.logout },
-];
+// --- Session Management ---
+auth.add({
+    method: 'post',
+    path: "/register",
+    summary: "Register new user",
+    schema: userRegistrationSchema,
+    controller: authController.register
+});
 
-// 3. Recovery Flow Group
-const recoveryRoutes: RouteConfig[] = [
-    { method: 'post', path: "/forgot-pass", summary: "Forgot Pass", schema: email, controller: authController.forgotPassword },
-    { method: 'post', path: "/verify-otp", summary: "Verify OTP", schema: otpSchema, controller: authController.verifyOTP },
-    { method: 'post', path: "/reset-pass", summary: "Reset Pass", controller: authController.resetPassword, extraMiddlewares: [requireResetToken()] },
-];
+auth.add({
+    method: 'post',
+    path: "/login",
+    summary: "Login",
+    schema: userLoginSchema,
+    controller: authController.login
+});
 
-[...identityRoutes, ...sessionRoutes, ...recoveryRoutes].forEach(route => auth.add(route));
+auth.add({
+    method: 'post',
+    path: "/refresh",
+    summary: "Refresh session",
+    schema: jwt,
+    controller: authController.refresh
+});
+
+auth.add({
+    method: 'post',
+    path: "/logout",
+    summary: "Logout",
+    schema: email,
+    controller: authController.logout
+});
+
+// --- Recovery Flow ---
+auth.add({
+    method: 'post',
+    path: "/forgot-pass",
+    summary: "Request reset OTP",
+    schema: email,
+    controller: authController.forgotPassword
+});
+
+auth.add({
+    method: 'post',
+    path: "/verify-otp",
+    summary: "Verify OTP code",
+    schema: otpSchema,
+    controller: authController.verifyOTP
+});
+
+auth.add({
+    method: 'post',
+    path: "/reset-pass",
+    summary: "Reset password",
+    controller: authController.resetPassword,
+    extraMiddlewares: [requireResetToken()]
+});
 
 export default auth.instance;

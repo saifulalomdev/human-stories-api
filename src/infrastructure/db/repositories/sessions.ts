@@ -1,6 +1,6 @@
 import { eq, and, gt } from "drizzle-orm";
 import { db } from "../db";
-import { sessions } from "../schema/sessions";
+import { sessions } from "../schema/session";
 import { SessionCreate } from "../validators/sessions";
 
 export const sessionsRepository = {

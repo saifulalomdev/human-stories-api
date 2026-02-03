@@ -2,7 +2,7 @@
 
 import { eq } from "drizzle-orm";
 import { db } from "../db";
-import { users } from "../schema/users";
+import { users } from "../schema/user";
 import { UserRegistration, UserUpdate } from "../validators/users";
 
 export const userRepository = {

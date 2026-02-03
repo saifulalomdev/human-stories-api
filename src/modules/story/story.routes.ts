@@ -14,7 +14,11 @@
 // } from '@repo/db';
 // import { validateResource } from '@/infrastructure/http/middlewares';
 
+import { createSmartRouter } from "@/infrastructure/http"
+
 // const routes: IRouter = Router();
+const story = createSmartRouter("story")
+export default  story.instance
 
 // /**
 //  * PUBLIC ROUTES

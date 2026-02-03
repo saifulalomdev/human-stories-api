@@ -1,6 +1,6 @@
 import { createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
-import { users } from '../schema/users';
+import { users } from '../schema/user';
 
 // --- Constants ---
 const MIN_NAME_LEN = 3;

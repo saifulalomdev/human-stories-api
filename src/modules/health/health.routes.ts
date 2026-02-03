@@ -1,6 +1,7 @@
-// src/modules/system/system.controller.ts
+import { Router } from "express";
 import { action } from '@/infrastructure/http';
 
+// health controller
 export const healthHandler = action(async () => {
     return {
         status: 'ok',
@@ -8,3 +9,6 @@ export const healthHandler = action(async () => {
         timestamp: new Date()
     };
 }, "Server is healthy");
+
+export default Router().get("/health", healthHandler)
+

@@ -1,11 +1,11 @@
 import { pgTable, uuid, unique } from "drizzle-orm/pg-core";
-import { stories } from "./stories";
-import { users } from "./users";
+import { stories } from "./storie";
+import { users } from "./user";
 import { reactionTypeEnum } from "./enums";
 import { relations } from "drizzle-orm";
 
 // 3. Reactions Table (The Connection)
-export const reactions = pgTable("reactions", {
+export const reactions = pgTable("reaction", {
     id: uuid("id").primaryKey(),
     storyId: uuid("story_id").references(() => stories.id, { onDelete: 'cascade' }).notNull(),
     userId: uuid("user_id").references(() => users.id).notNull(),

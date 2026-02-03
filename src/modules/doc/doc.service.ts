@@ -1,3 +1,4 @@
+
 // src/common/docs/generate-openapi.js
 import {
     OpenAPIRegistry,
@@ -7,7 +8,7 @@ import {
 export const registry = new OpenAPIRegistry();
 
 
-registry.registerComponent("securitySchemes" , "bearerAuth" , {
+registry.registerComponent("securitySchemes", "bearerAuth", {
     type: "http",
     scheme: "bearer",
     bearerFormat: "JWT"
@@ -24,8 +25,8 @@ export function generateOpenApiSpec() {
             description: "Human stories REST API documentation",
         },
         servers: [
-            { url: "http://localhost:5000"  , description: "Development server"},
-            { url: "https://buyflow-0gs4.onrender.com" , description: "Production server" },
+            { url: "http://localhost:5000", description: "Development server" },
+            { url: "https://buyflow-0gs4.onrender.com", description: "Production server" },
         ],
     });
 }

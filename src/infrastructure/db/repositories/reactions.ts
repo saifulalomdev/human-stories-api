@@ -1,6 +1,6 @@
 import { and, eq } from 'drizzle-orm';
 import { db } from '../db';
-import { reactions } from '../schema/reactions';
+import { reactions } from '../schema/reaction';
 import { ReactionType } from '../schema/enums';
 
 export async function findReaction(storyId: string, userId: string) {
