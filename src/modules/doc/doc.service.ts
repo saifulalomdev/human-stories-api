@@ -26,7 +26,7 @@ export function generateOpenApiSpec() {
         },
         servers: [
             { url: "http://localhost:5000", description: "Development server" },
-            { url: "https://buyflow-0gs4.onrender.com", description: "Production server" },
+            { url: "https://human-stories-api.onrender.com", description: "Production server" },
         ],
     });
 }
