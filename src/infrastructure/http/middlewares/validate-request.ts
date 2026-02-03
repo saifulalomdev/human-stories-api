@@ -7,7 +7,7 @@ type RequestPart = "body" | "params" | "query";
  * Validates a request part against a Zod schema.
  * If validation fails, it hands the error to the global error boundary.
  */
-export const validateBody = (schema: ZodSchema, part: RequestPart = "body") =>
+export const validateRequest = (schema: ZodSchema, part: RequestPart = "body") =>
     (req: any, _res: any, next: any) => {
 
         const result = schema.safeParse(req[part]);
