@@ -1,10 +1,10 @@
-// src/common/middleware/notFound.js
-import { sendResponse } from '@/core/send-response';
-import { Request, Response } from 'express';
+// src/common/middleware/notFound.ts
+import { AppError } from '@/core';
+import { action } from '../action';
 
-export function notFoundHandler(req: Request, res: Response) {
-
-    const message = `${req.method.toString()} "${req.originalUrl}" route  not found`;
-
-    return sendResponse(res, 404, message, false, null);
-}
+export const notFoundHandler = action(async (req) => {
+    const message = `${req.method} "${req.originalUrl}" route not found`;
+    // By throwing here, the 'action' wrapper catches it 
+    // and sends it to your global errorBoundary!
+    throw new AppError(message, 404);
+});

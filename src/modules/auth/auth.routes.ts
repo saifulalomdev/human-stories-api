@@ -1,26 +1,21 @@
-import { requireResetToken, validateResource } from '@/infrastructure/http/middlewares';
-import { Router, IRouter } from 'express';
+// src/modules/auth/auth.routes.ts
+import { Router } from 'express';
 import { authController } from './auth.controller';
-import { requireAuth } from '@/infrastructure/http/middlewares';
+import { requireAuth, requireResetToken, validateBody } from '@/infrastructure/http/middlewares';
 import { otpSchema, userLoginSchema, userRegistrationSchema, jwt, email } from '@/infrastructure/db';
 
 
-const routes: IRouter = Router()
+export default Router()
+    // 1. Identity
+    .get("/me", requireAuth(), authController.getMe)
 
-routes.get("/me", requireAuth(), authController.getMe)
+    // 2. Session Management
+    .post("/register", validateBody(userRegistrationSchema), authController.register)
+    .post("/login", validateBody(userLoginSchema), authController.login)
+    .post("/refresh", validateBody(jwt), authController.refresh)
+    .post("/logout", validateBody(email), authController.logout)
 
-routes.post("/refresh", validateResource(jwt), authController.refresh);
-
-routes.post("/register", validateResource(userRegistrationSchema), authController.register)
-
-routes.post("/login", validateResource(userLoginSchema), authController.login);
-
-routes.post("/logout", validateResource(jwt), authController.logout);
-
-routes.post("/forgot-password", validateResource(email), authController.forgotPassword);
-
-routes.post("/verify-otp", validateResource(otpSchema), authController.verifyOTP);
-
-routes.post("/reset-password", requireResetToken(), authController.resetPassword);
-
-export default routes
+    // 3. Recovery Flow
+    .post("/forgot-pass", validateBody(email), authController.forgotPassword)
+    .post("/verify-otp", validateBody(otpSchema), authController.verifyOTP)
+    .post("/reset-pass", requireResetToken(), authController.resetPassword);

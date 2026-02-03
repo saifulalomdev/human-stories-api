@@ -1,29 +1,22 @@
-import { ZodObject } from 'zod';
-import { Request, Response, NextFunction } from 'express';
+// @saifulalom.com/core -> src/http/validator.ts
+import { ZodSchema } from 'zod';
 
-export const validateResource = (
-    schema: ZodObject<any>, 
-    key: "body" | "params" | "query" = "body"
-) => (req: Request, res: Response, next: NextFunction) => {
+type RequestPart = "body" | "params" | "query";
 
-    const result = schema.safeParse(req[key]);
+/**
+ * Validates a request part against a Zod schema.
+ * If validation fails, it hands the error to the global error boundary.
+ */
+export const validateBody = (schema: ZodSchema, part: RequestPart = "body") =>
+    (req: any, _res: any, next: any) => {
 
-    if (!result.success) {
-        const issue = result.error.issues[0];
-        const pathName = String(issue?.path?.[0] ?? "field");
-        const message = issue?.message ?? "Invalid value";
+        const result = schema.safeParse(req[part]);
 
-        return res.status(400).json({
-            success: false,
-            message: "Validation Error",
-            error: {
-                message: `${pathName}: ${message}`,
-                details: result.error.flatten()
-            }
-        });
-    }
+        if (!result.success) {
+            return next(result.error);
+        }
 
-    // Replace original data with the Zod-parsed (and cleaned) data
-    req[key] = result.data;
-    next();
-};
+        // Clean data is assigned back to the request
+        req[part] = result.data;
+        next();
+    };
