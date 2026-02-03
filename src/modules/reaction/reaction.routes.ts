@@ -4,6 +4,8 @@
 // import { validateResource } from '@/infrastructure/http/middlewares';
 // import { idParams } from '@repo/db'; // Assuming you have a validator for UUID params
 
+import { createSmartRouter } from "@/infrastructure/http"
+
 // const routes: IRouter = Router();
 
 // // POST /reactions/:storyId/toggle
@@ -16,3 +18,6 @@
 // );
 
 // export default routes;
+
+const story = createSmartRouter("story")
+export default  story.instance
