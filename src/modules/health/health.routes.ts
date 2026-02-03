@@ -1,3 +1,4 @@
+import { Router } from "express";
 // src/modules/system/system.controller.ts
 import { action } from '@/infrastructure/http';
 
@@ -8,3 +9,6 @@ export const healthHandler = action(async () => {
         timestamp: new Date()
     };
 }, "Server is healthy");
+
+export default Router().get("/health", healthHandler)
+
