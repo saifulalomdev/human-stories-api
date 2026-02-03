@@ -1,10 +1,10 @@
 import { pgTable, uuid, text, timestamp } from "drizzle-orm/pg-core";
-import { users } from "./users";
+import { users } from "./user";
 import { relations } from "drizzle-orm";
-import { reactions } from "./reactions";
+import { reactions } from "./reaction";
 
 // 2. Stories Table
-export const stories = pgTable("stories", {
+export const stories = pgTable("story", {
   id: uuid("id").defaultRandom().primaryKey(),
   title: text("title").notNull(),
   content: text("content").notNull(),

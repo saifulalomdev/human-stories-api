@@ -1,7 +1,7 @@
 import { Router } from "express";
-// src/modules/system/system.controller.ts
 import { action } from '@/infrastructure/http';
 
+// health controller
 export const healthHandler = action(async () => {
     return {
         status: 'ok',

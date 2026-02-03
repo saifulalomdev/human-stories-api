@@ -1,5 +1,5 @@
 import { db } from "../db";
-import { otps } from "../schema/otps";
+import { otps } from "../schema/otp";
 import { eq, and, gt } from "drizzle-orm";
 
 export const otpRepository = {

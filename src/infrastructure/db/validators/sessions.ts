@@ -1,7 +1,7 @@
 import { createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { UserPublic } from './users';
-import { sessions } from '../schema/sessions';
+import { sessions } from '../schema/session';
 
 // --- Base Schemas ---
 export const sessionBaseSchema = createSelectSchema(sessions, {

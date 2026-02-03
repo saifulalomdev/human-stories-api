@@ -1,4 +1,4 @@
-import { stories } from '../schema/stories';
+import { stories } from '../schema/storie';
 import { createInsertSchema } from 'drizzle-zod';
 import { z } from 'zod';
 

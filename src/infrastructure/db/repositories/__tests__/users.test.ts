@@ -2,7 +2,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { userRepository } from '../users';
 import { db } from '../../db';
-import { users } from '../../schema/users';
+import { users } from '../../schema/user';
 import { eq } from 'drizzle-orm';
 
 describe('UserRepository Integration Tests', () => {
