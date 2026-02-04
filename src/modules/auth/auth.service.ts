@@ -1,11 +1,11 @@
 import { sign } from 'hono/jwt';
 import { env } from '@/config/env.js';
-import type { InsertUser } from "./auth.validator.js";
+import type { AuthResponse, InsertUser } from "./auth.validator.js";
 import { userRepo } from "./user.repo.js";
 import { AppError } from '@/lib/app-error.js';
 
 export const authService = {
-    registerAccount: async (userData: InsertUser) => {
+    registerAccount: async (userData: InsertUser): Promise<AuthResponse> => {
         // 1. Check if user exists
         const userExist = await userRepo.findByEmail(userData.email);
         if (userExist) {
@@ -26,7 +26,7 @@ export const authService = {
         return { user: newUser, accessToken };
     },
 
-    login: async (credentials: { email: string }) => {
+    login: async (credentials: { email: string }): Promise<AuthResponse> => {
         const user = await userRepo.findByEmail(credentials.email);
 
         if (!user) {
@@ -34,8 +34,8 @@ export const authService = {
         }
 
         // 🚀 Generate Access Token
-        const token = await sign({ id: user.id, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 }, env.JWT_ACCESS_SECRET);
+        const accessToken = await sign({ id: user.id, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 }, env.JWT_ACCESS_SECRET);
 
-        return { user, token };
+        return { user, accessToken };
     }
 };

@@ -17,10 +17,10 @@ export const userLoginSchema = userBaseSchema.pick({
 }).openapi("Login user input");
 
 export const authResponse= z.object({
-    user: userBaseSchema,
+    user: userRegisterSchema,
     accessToken: z.jwt()
 })
 
-
+export type AuthResponse = z.infer<typeof authResponse>
 export type InsertUser = typeof users.$inferInsert
 export type User = typeof users.$inferSelect

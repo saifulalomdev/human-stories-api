@@ -1,8 +1,6 @@
 // src/modules/auth/auth.routes.ts
-
 import { apiRotue } from "@/lib/router.js";
 import { authResponse, userLoginSchema, userRegisterSchema } from "./auth.validator.js";
-import { createRoute, z } from "@hono/zod-openapi";
 
 export const registerRoute = apiRotue({
     tag: "Auth",
@@ -19,7 +17,7 @@ export const loginRoute = apiRotue({
     method: "post",
     path: "/login",
     response: authResponse,
-    summary: "Register account",
+    summary: "Login",
     body: userLoginSchema,
     status: 200
 })
