@@ -8,7 +8,7 @@ export const authService = {
         // 1. Check if user exists
         const userExist = await userRepo.findByEmail(userData.email);
         if (userExist) {
-            throw new AppError("This email is already taken", 409);
+            throw new AppError("This email is already register", 409);
         }
 
         // 3. Create user
@@ -24,7 +24,7 @@ export const authService = {
         const user = await userRepo.findByEmail(credentials.email);
 
         if (!user) {
-            throw new Error("INVALID_CREDENTIALS");
+            throw new AppError("This email is not registered", 404);
         }
         const { id, name, email } = user
         // 🚀 Generate Access Token

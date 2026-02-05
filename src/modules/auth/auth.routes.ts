@@ -25,6 +25,7 @@ export const registerRoute = createRoute({
                 }
             }
         },
+        409: { description: "This email is already registered" }
 
 
     }
