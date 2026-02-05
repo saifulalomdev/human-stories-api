@@ -1,23 +1,59 @@
 // src/modules/auth/auth.routes.ts
-import { apiRotue } from "@/lib/router.js";
 import { authResponse, userLoginSchema, userRegisterSchema } from "./auth.validator.js";
+import { createRoute } from "@hono/zod-openapi";
 
-export const registerRoute = apiRotue({
-    tag: "Auth",
+export const registerRoute = createRoute({
+    tags: ["Auth"],
+    summary: "Register account",
     method: "post",
     path: "/register",
-    response: authResponse,
-    summary: "Register account",
-    body: userRegisterSchema,
-    status: 201
-})
+    request: {
+        body: {
+            content: {
+                "application/json": {
+                    schema: userRegisterSchema
+                }
+            }
+        }
+    },
+    responses: {
+        201: {
+            description: "User account register successfully",
+            content: {
+                "application/json": {
+                    schema: authResponse
+                }
+            }
+        },
 
-export const loginRoute = apiRotue({
-    tag: "Auth",
+
+    }
+
+});
+
+
+export const loginRoute = createRoute({
+    tags: ["Auth"],
+    summary: "Login",
     method: "post",
     path: "/login",
-    response: authResponse,
-    summary: "Login",
-    body: userLoginSchema,
-    status: 200
+    request: {
+        body: {
+            content: {
+                "application/json": {
+                    schema: userLoginSchema
+                }
+            }
+        }
+    },
+    responses: {
+        200: {
+            description: "User login",
+            content: {
+                "application/json": {
+                    schema: authResponse
+                }
+            }
+        }
+    },
 })

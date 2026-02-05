@@ -8,9 +8,9 @@ const app = new OpenAPIHono()
 
 app.route("/auth", authRoutes);
 
-app.doc("/doc", openApiConfig);
+app.doc("/docs/json", openApiConfig);
 
-app.get("/ui", swaggerUI({ url: "/doc" }));
+app.get("/docs", swaggerUI({ url: "/docs/json" }));
 
 app.onError(errorBoundary)
 
